@@ -1,0 +1,130 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+  
+  h1 {
+    margin-bottom: 1em;
+    color: white;
+  }
+  
+  .google-btn {
+    display: flex;
+    align-items: center;
+    padding: 0.5em 1em;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .google-logo {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  /* Estilos CSS aquí */
+
+  #userlogin {
+    width: 150px;
+    height: 150px;
+    margin-bottom: 20px;
+  }
+
+  
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+
+  body {
+    font-family:'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-image: url("https://c1.wallpaperflare.com/preview/871/219/673/wine-romance-evening-meal.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
+  }
+
+  header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+  }
+  
+  header h1 {
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+  }
+  
+  header h1 img {
+    width: 80px;
+    height: 80px;
+    margin-right: 10px;
+  }
+  header img {
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+  }
+
+main {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+#search-input {
+  padding: 5px;
+  margin-right: 10px;
+  width: 200px;
+}
+
+#search-btn {
+  padding: 5px 10px;
+  color: red;
+}
+
+#event-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.event-card {
+  border: 1px solid #ccc;
+  padding: 10px;
+}
+
+.event-card img {
+  max-width: 100%;
+  height: auto;
+}
+
+footer {
+  background-color: #333;
+  color: #fff;
+  padding: 10
+}
+

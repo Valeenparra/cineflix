@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Baazar</title>
+  <link rel="stylesheet" type="text/css" href="styles.css">
+  <style>
+    #user-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img id="user-icon" src="login.png" alt="User Icon"> <h1>Baazar <img src="order-food.png" alt="Food Icon"></h1>
+  </header>
+  
+  <main>
+    <p>¡Bienvenido a Baazar, la app que sirve para buscar eventos gastronomicos cerca de tu zona!</p>
+    <div class="search-container">
+      <input type="text" id="search-input" placeholder="Buscar evento">
+      <button id="search-btn">Buscar</button>
+
+    </div>
+    <div id="event-results"></div>
+  </main>
+  <footer>
+    <p>© 2023 Baazar. Todos los derechos reservados.</p>
+  </footer>
+  <script src="evento.js"></script>
+</body>
+</html>
