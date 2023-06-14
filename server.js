@@ -56,7 +56,7 @@ class BaazarBackend {
       const { query } = req.body;
     
       try {
-       
+       console.log("hola")
         const events = await db
         .collection("Event")
         .find({ nombre: { $regex: query, $options: "i" } })
