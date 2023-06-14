@@ -1,6 +1,6 @@
 const { MongoClient } = require("mongodb");
 
-const connectionString = "mongodb+srv://apitest:vvqB5cFxyAxusDQV@apitest.qsbyhnm.mongodb.net/";
+const connectionString = "mongodb+srv://apitest:RJ6w4XKmYJb5BwCc@apitest.qsbyhnm.mongodb.net/";
 
 const client = new MongoClient(connectionString);
 
@@ -8,14 +8,20 @@ let db; // Variable para almacenar la referencia a la base de datos
 
 async function connect() {
   try {
-    await client.connect(); // Espera a que se establezca la conexión
-    db = client.db("Bazaar"); // Asigna la referencia a la base de datos
+    const conn = await client.connect(); // Esperamos a que se establezca la conexión
+    db = conn.db("Cineflix"); // referencia al nombre a la base de datos
     console.log("Conexión exitosa a la base de datos");
   } catch (error) {
     console.error("Error al conectar a la base de datos:", error);
+    throw error; // Lanza el error para que pueda ser capturado en server.js
   }
 }
 
-connect(); // Llama a la función de conexión al inicio del programa
+async function getDB() {
+  if (!db) {
+    await connect();
+  }
+  return db;
+}
 
-module.exports = db; // Exporta la referencia a la base de datos
+module.exports = getDB; // Exporta la función getDB en lugar de la variable db

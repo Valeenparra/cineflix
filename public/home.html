@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="estilos.css">
+	<title>Home - CINEFLIX</title>
+</head>
+<body>
+  <header>
+    <span class="logout-container">
+      <button id="logout" class="logout-button">Salir de la sesión</button>
+    </span>
+    <h1>CINEFLIX</h1>
+  </header>
+	<div class="contenedor" id="contenedor"></div>
+
+	<div class="paginacion">
+		<button id="btnAnterior">Anterior</button>
+		<button id="btnSiguiente">Siguiente</button>
+	</div>
+ 
+  <div id="popup" class="popup">
+    <div class="popup-form">
+      <label for="nombre">Nombre:</label>
+      <input type="text" id="nombre" name="nombre" required>
+      <label for="pelicula">Película:</label>
+      <input type="text" id="pelicula" name="pelicula" required>
+      <button id="guardarForm">Guardar en mi lista</button>
+    </div>
+  </div>
+ 
+  <footer>
+    © 2023 CINEFLIX. Todos los derechos reservados.
+  </footer>
+  <script src="evento.js"></script>
+</body>
+</html>

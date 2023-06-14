@@ -1,68 +1,9 @@
 document.addEventListener("DOMContentLoaded", () => {
   console.log("DOMContentLoaded funciona");
-  const searchInput = document.getElementById("search-input");
-  const searchBtn = document.getElementById("search-btn");
-  const eventResults = document.getElementById("event-results");
+  
 
-  searchBtn.addEventListener("click", () => {
-    const searchQuery = searchInput.value;
-    searchEvents(searchQuery);
-  });
-
-  async function searchEvents(query) {
-    try {
-   
-      const response = await fetch("/search-events", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ query }),
-      });
-
-     
-      if (response.ok) {
-        const events = await response.json();
-
-        // Limpiar los resultados anteriores
-        eventResults.innerHTML = "";
-
-        events.forEach((event) => {
-          const eventCard = createEventCard(event);
-          eventResults.appendChild(eventCard);
-        });
-      } else {
-        console.error("Error al buscar eventos:", response.status);
-      }
-    } catch (error) {
-      console.error("Error al buscar eventos:", error);
-    }
-  }
-
-  function createEventCard(event) {
-    const eventCard = document.createElement("div");
-    eventCard.className = "event-card";
-
-    const eventImage = document.createElement("img");
-    eventImage.src = event.imagen; // Actualiza la propiedad 'photo' a 'imagen'
-    eventCard.appendChild(eventImage);
-
-    const eventName = document.createElement("h3");
-    eventName.textContent = event.nombre; // Actualiza la propiedad 'name' a 'nombre'
-    eventCard.appendChild(eventName);
-
-    const eventLocation = document.createElement("p");
-    eventLocation.textContent = event.ubicacion; // Actualiza la propiedad 'location' a 'ubicacion'
-    eventCard.appendChild(eventLocation);
-
-    const eventDate = document.createElement("p");
-    eventDate.textContent = event.fecha; // Actualiza la propiedad 'date' a 'fecha'
-    eventCard.appendChild(eventDate);
-
-    return eventCard;
-  }
-
-  const userIcon = document.getElementById("user-icon");
+//Codigo para salir de la sesion al apretar el icono
+  const userIcon = document.getElementById("logout");
   userIcon.addEventListener("click", logout);
 
   async function logout() {
@@ -81,3 +22,124 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   }
 });
+
+
+//botones para pasar de pagina
+let pagina = 1;
+const btnAnterior = document.getElementById('btnAnterior');
+const btnSiguiente = document.getElementById('btnSiguiente');
+
+btnSiguiente.addEventListener('click', () => {
+    if(pagina < 1000){
+        pagina += 1;
+        cargarPeliculas();
+    }
+})
+btnAnterior.addEventListener('click', () => {
+    if(pagina > 1){
+        pagina -= 1;
+        cargarPeliculas();
+    }
+})
+
+//peliculas api
+const cargarPeliculas = async() => {
+    
+try {
+    const respuesta =  await fetch(`https://api.themoviedb.org/3/movie/popular?api_key=ef58448505468ce466166e5b3cccd861&language=es-ES&page=${pagina}`);
+    console.log(respuesta);
+
+//si la respuesta es correcta
+    if(respuesta.status === 200){
+        const datos = await respuesta.json();
+        
+        let peliculas = '';
+        datos.results.forEach(pelicula => {
+            peliculas += `
+                <div class="pelicula">
+                <br>
+                <br>
+                    <img class="poster" src="https://image.tmdb.org/t/p/w500/${pelicula.poster_path}">
+                <h1>${pelicula.title}<h1/>
+                <br>
+                <button class="guardar-button">Guardar</button></div>
+            `;
+        });
+
+        document.getElementById('contenedor').innerHTML = peliculas;
+
+    }else if(respuesta.status === 401){
+        console.log('pusiste la llave mal');
+    }else if(respuesta.status === 404){
+        console.log('la pelicula no existe');
+    }
+
+    }catch(error){
+    console.log(error);
+}
+   
+}
+
+cargarPeliculas();
+
+
+//popup
+const contenedor = document.getElementById("contenedor");
+contenedor.addEventListener("click", (event) => {
+  if (event.target.classList.contains("guardar-button")) {
+    mostrarPopup();
+  }
+});
+
+function mostrarPopup() {
+  const popup = document.getElementById("popup");
+  popup.innerHTML = `
+   <div class="popup-form">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" placeholder="Ingrese su nombre" required>
+            <label for="pelicula">Película:</label>
+            <input type="text" id="pelicula" name="pelicula" placeholder="Ingrese el nombre de la película" required>
+            <button id="guardarForm">Guardar</button>
+        </div>
+    `;
+  popup.style.display = "block";
+
+  // Agregar evento al botón "Guardar" del formulario emergente
+  const guardarFormButton = document.getElementById("guardarForm");
+  guardarFormButton.addEventListener("click", guardarFormulario);
+}
+
+function ocultarPopup() {
+  const popup = document.getElementById("popup");
+  popup.style.display = "none";
+}
+
+function guardarFormulario() {
+  const nombre = document.getElementById("nombre").value;
+  const pelicula = document.getElementById("pelicula").value;
+  const formData = {
+    nombre: nombre,
+    pelicula: pelicula
+  };
+
+  fetch("/save", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(formData)
+  })
+    .then(response => {
+      if (response.ok) {
+        // Datos guardados exitosamente
+        console.log("Datos guardados correctamente");
+      } else {
+        console.error("Error al guardar los datos:", response.status);
+      }
+      ocultarPopup();
+    })
+    .catch(error => {
+      console.error("Error al guardar los datos:", error);
+      ocultarPopup();
+    });
+}

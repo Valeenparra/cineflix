@@ -4,9 +4,7 @@ const session = require('express-session');
 const path = require('path');
 const { initialize, checkAuthenticated } = require('./auth.js');
 const db = require('./db.js');
-
-
-
+const getDB = require('./db.js');
 
 class BaazarBackend {
   constructor() {
@@ -14,7 +12,11 @@ class BaazarBackend {
     app.use(express.json());
     app.use(express.static('public'));
 
-    initialize(app); // Aca hacemos referencia al método initialize de auth.js
+    initialize(app); // Utilizamos el método initialize de auth.js
+
+//swagger
+
+
 
     app.get('/login', (req, res) => {
       res.sendFile(path.join(__dirname, 'public', 'login.html'));
@@ -30,7 +32,7 @@ class BaazarBackend {
     }));
 
     app.get('/login/success', (req, res) => {
-        res.redirect('/index.html');        // Redirige a index.html en caso de éxito
+        res.redirect('/home.html');        // Redirige a index.html en caso de éxito
     });
 
     app.get('/login/failure', (req, res) => {
@@ -42,43 +44,39 @@ class BaazarBackend {
     app.post("/logout", (req, res) => {
       req.logOut(err => console.log(err));
       res.redirect("/login");
-
-    app.post("/logout", (req, res) => {
-      req.logOut();
-      res.redirect("/login");
-    });
-
-    });
-
-
-    //Parte del código en la que se especifica en traer el evento
-    app.post("/search-events", async (req, res) => {
-      const { query } = req.body;
-    
-      try {
-       console.log("hola")
-        const events = await db
-        .collection("Event")
-        .find({ nombre: { $regex: query, $options: "i" } })
-        .toArray();
-
-        res.json(events);
-      } catch (error) {
-        console.error("Error al buscar eventos en la base de datos:", error);
-        res.status(500).json({ message: "Error al buscar eventos" });
-      }
     });
     
+    //Salir de la sesion
+        app.post("/logout", (req, res) => {
+          req.logOut();
+          res.redirect("/login");
+        });
 
+// Guardar pelicula
+app.post("/save", async (req, res) => {
+  const { nombre, pelicula } = req.body;
 
-    app.listen(3000, () => console.log('CORRIENDO en http://localhost:3000'));
+  try {
+    const db = await getDB(); // Espera a que la conexión a la base de datos se establezca
+    const collection = db.collection("Peliculas");
+
+    // Guardar los datos en la base de datos
+    await collection.insertOne({ nombre: nombre, pelicula: pelicula });
+
+    console.log("Datos guardados correctamente en la base de datos");
+    res.status(200).json({ message: "Datos guardados correctamente" });
+  } catch (error) {
+    console.error("Error al guardar los datos en la base de datos:", error);
+    res.status(500).json({ message: "Error al guardar los datos" });
   }
+});
 
-
+        app.listen(3000, () => console.log('CORRIENDO en http://localhost:3000'));
+      }
 
   _goHome(req, res) {
     if (req.isAuthenticated()) {
-      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+      res.sendFile(path.join(__dirname, 'public', 'home.html'));
     } else {
       res.redirect('/login');
     }
